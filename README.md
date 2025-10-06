@@ -19,6 +19,7 @@ Built a document parsing and LLM query application that extracts and structures 
 ## Prerequisites
 
 - Docker installed on your system ([Docker Desktop](https://www.docker.com/products/docker-desktop)).
+- Docker Compose installed (usually included with Docker Desktop).
 - Ollama installed and the Mistral model running locally.
 - (Optional) Git, if you want to clone the repository.
 
@@ -26,23 +27,63 @@ Built a document parsing and LLM query application that extracts and structures 
 
 ## Setup Instructions
 
-### 1. Pull the Docker Image
+### 1. Pull the Docker Images
+
+The Docker Compose file will pull both the application and MongoDB images automatically. If you want to pull manually:
 
 ```bash
 docker pull ghcr.io/harshindcoder/rag-pipeline-panscience-innovations:latest
+docker pull mongo:latest
 ````
 
-### 2. Run the Container
+---
 
-Open a terminal and run:
+### 2. Run the Services via Docker Compose
 
-```bash
-docker run -it -p 8000:8000 ghcr.io/harshindcoder/rag-pipeline-panscience-innovations:latest
+Create a file named `docker-compose.yml` (or use the one provided) with the following content:
+
+```yaml
+version: "3.9"
+
+services:
+  app:
+    image: ghcr.io/harshindcoder/rag-pipeline-panscience-innovations:latest
+    container_name: rrag_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: rrag_mongo
+    ports:
+      - "27017:27017"
 ```
 
-* `-p 8000:8000` maps the FastAPI port in the container to your local machine.
-* `-it` allows interactive terminal access.
-* `--rm` can be added if you want the container to be removed after stopping.
+Then, in the terminal, run:
+
+```bash
+docker-compose up
+```
+
+* To run in the background (detached mode):
+
+```bash
+docker-compose up -d
+```
+
+* To view logs:
+
+```bash
+docker-compose logs -f
+```
+
+* To stop all services:
+
+```bash
+docker-compose down
+```
 
 ---
 
@@ -54,7 +95,7 @@ Open another terminal and run:
 ollama run mistral
 ```
 
-* The container expects to connect to Ollama at `http://localhost:11434`. Make sure this port is open.
+* The container expects to connect to Ollama at `http://localhost:11434`.
 * Mistral must be running while using the API.
 
 ---
@@ -86,9 +127,9 @@ curl -X POST -F "question=What is this file about?" http://localhost:8000/ask
 
 ## Notes
 
-* **Terminals:** You need at least **two terminals**: one for Docker/FastAPI, one for Ollama. The `curl` commands can run in the same terminal or separate ones.
+* **Terminals:** You need at least **two terminals**: one for Docker Compose (FastAPI + MongoDB), one for Ollama. The `curl` commands can run in the same terminal or separate ones.
 * **File paths:** Replace `/path/to/your/document.pdf` with your PDF location.
-* **Port:** The API assumes `FastAPI` runs on port `8000`. Adjust `-p` in `docker run` if needed.
+* **Ports:** FastAPI runs on `8000` and MongoDB on `27017`. Adjust the `ports` in `docker-compose.yml` if needed.
 
 ---
 
@@ -97,3 +138,7 @@ curl -X POST -F "question=What is this file about?" http://localhost:8000/ask
 * Add Linux compatibility.
 * Multi-user support for larger document processing.
 * Better error handling for missing Mistral/Ollama connections.
+
+---
+
+
