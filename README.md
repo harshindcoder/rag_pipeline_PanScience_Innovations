@@ -125,6 +125,34 @@ curl -X POST -F "question=What is this file about?" http://localhost:8000/ask
 
 ---
 
+Here’s the 6th point refined for your README:
+
+---
+
+### 6. Quick Manual Checks
+
+For now, you can verify that everything is running with simple commands:
+
+* **Check Docker containers:**
+
+```bash
+docker ps
+```
+
+* **Check FastAPI is responding:**
+
+```bash
+curl -X GET http://localhost:8000/docs
+```
+
+* **Parser and VectorDB** are verified via pytest:
+
+```bash
+pytest -v tests/
+```
+
+---
+
 ## Notes
 
 * **Terminals:** You need at least **two terminals**: one for Docker Compose (FastAPI + MongoDB), one for Ollama. The `curl` commands can run in the same terminal or separate ones.

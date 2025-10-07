@@ -6,3 +6,4 @@ PyPDF2
 sentence-transformers
 requests
 python-multipart
+pytest
