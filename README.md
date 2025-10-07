@@ -150,6 +150,7 @@ curl -X GET http://localhost:8000/docs
 ```bash
 pytest -v tests/
 ```
+Tests are available in the repo but are not included in the production Docker image. Run them locally using pytest.
 
 ---
 
