@@ -2,6 +2,8 @@
 
 Built a document parsing and LLM query application that extracts and structures information from PDFs, enabling natural language queries on the content using a vector database and local LLMs.
 
+![Data Pipeline Diagrma](images/RAG_PIPELINE.png)
+
 **Note:** To function properly, this pipeline requires a running **Mistral model on Ollama**, which serves as the local LLM backend for generating responses.
 
 ---
